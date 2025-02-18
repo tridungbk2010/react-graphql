@@ -1,0 +1,17 @@
+{
+  "name": "server",
+  "module": "main.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run main.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.11.3"
+  }
+}
