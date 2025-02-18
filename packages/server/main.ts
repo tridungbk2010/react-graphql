@@ -26,12 +26,21 @@ const typeDefs = `#graphql
     description: String
 }
 
+  enum SortDirection {
+    ASC
+    DESC
+  }
+
+  input HolidayOfferOrderByInput {
+    dateAdded: SortDirection
+  }
+
   # The "Query" type is special: it lists all of the available queries that
   # clients can execute, along with the return type for each. In this
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
     books: [Book],
-    holidayOffers: [HolidayOffer]
+    holidayOffers(orderBy: HolidayOfferOrderByInput): [HolidayOffer]
   }
 
   type Mutation {
@@ -42,7 +51,22 @@ const typeDefs = `#graphql
 const resolvers = {
   Query: {
     books: () => BOOKS,
-    holidayOffers: () => HOLIDAY_OFFERS,
+    holidayOffers: (
+      _: any,
+      { orderBy }: { orderBy?: { dateAdded?: "ASC" | "DESC" } }
+    ) => {
+      if (!orderBy || !orderBy.dateAdded) {
+        return HOLIDAY_OFFERS;
+      }
+
+      return [...HOLIDAY_OFFERS].sort((a, b) => {
+        const dateA = new Date(a.dateAdded);
+        const dateB = new Date(b.dateAdded);
+        return orderBy.dateAdded === "DESC"
+          ? dateB.getTime() - dateA.getTime()
+          : dateA.getTime() - dateB.getTime();
+      });
+    },
   },
   Mutation: {
     markVisited: (_: any, { offerId }: { offerId: string }) => {

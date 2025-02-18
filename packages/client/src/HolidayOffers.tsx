@@ -18,7 +18,7 @@ const GET_HOLIDAY_OFFERS: TypedDocumentNode<{
   holidayOffers: HolidayOffer[];
 }> = gql`
   query GetHolidayOffers {
-    holidayOffers {
+    holidayOffers(orderBy: { dateAdded: DESC }) {
       id
       name
       visitedCount
@@ -90,6 +90,7 @@ export default function HolidayOffers() {
           visitedCount={h.visitedCount}
           price={`${h.price.value} ${h.price.currency}`}
           imageUrl={h.imageUrl}
+          dateAdded={h.dateAdded}
           description={h.description}
           clickHandler={() => {
             markVisited({
