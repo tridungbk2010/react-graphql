@@ -33,12 +33,32 @@ const typeDefs = `#graphql
     books: [Book],
     holidayOffers: [HolidayOffer]
   }
+
+  type Mutation {
+    markVisited(offerId: String!): HolidayOffer
+  }
 `;
 
 const resolvers = {
   Query: {
     books: () => BOOKS,
     holidayOffers: () => HOLIDAY_OFFERS,
+  },
+  Mutation: {
+    markVisited: (_: any, { offerId }: { offerId: string }) => {
+      const offerIndex = HOLIDAY_OFFERS.findIndex((of) => of.id === offerId);
+
+      if (offerIndex === -1) {
+        throw new Error("can not update");
+      }
+
+      HOLIDAY_OFFERS[offerIndex] = {
+        ...HOLIDAY_OFFERS[offerIndex],
+        visitedCount: HOLIDAY_OFFERS[offerIndex].visitedCount + 1,
+      };
+
+      return HOLIDAY_OFFERS[offerIndex];
+    },
   },
 };
 

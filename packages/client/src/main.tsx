@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import HolidayOffers from "./HolidayOffers.tsx";
+// import InfiniteScroll from "./components/InfiniteScroll.tsx";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/",
